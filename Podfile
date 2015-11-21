@@ -5,8 +5,6 @@ platform :ios, '8.0'
 
 target 'cwa' do
 
-pod 'JBChartView'
-
 pod 'BlocksKit'
 
 pod 'NSDate-Escort'

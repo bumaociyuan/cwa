@@ -9,17 +9,13 @@
 #import "ViewController2.h"
 #import <BlocksKit/BlocksKit.h>
 #import <NSDate-Escort/NSDate+Escort.h>
-#import <JBChartView/JBBarChartView.h>
 #import <PNChart/PNChart.h>
 
 #define UIColorFromHex(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16))/255.0 green:((float)((hex & 0xFF00) >> 8))/255.0 blue:((float)(hex & 0xFF))/255.0 alpha:1.0]
-#define kJBColorBarChartBarGreen UIColorFromHex(0x34b234)
-#define kJBColorBarChartBarBlue UIColorFromHex(0x08bcef)
 
+@interface ViewController2 ()<UIPopoverControllerDelegate>
 
-@interface ViewController2 ()<UIPopoverControllerDelegate,JBBarChartViewDataSource,JBBarChartViewDelegate>
-
-@property (weak, nonatomic) IBOutlet JBBarChartView *chartView;
+@property (weak, nonatomic) IBOutlet PNBarChart *chartView;
 
 
 @property (weak, nonatomic) IBOutlet UIButton *dateButton;
@@ -44,22 +40,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.currentDate = [NSDate date];
-    self.chartView.dataSource = self;
-    self.chartView.delegate = self;
-    
-    [self setupTimeLabels];
+    [self setupChartView];
 }
 
-- (void)setupTimeLabels {
-    CGFloat width = CGRectGetWidth(self.chartView.frame)/24;
+- (void)setupChartView {
+    NSMutableArray *xLabels = [NSMutableArray new];
     for (int i = 0; i<24; i++) {
-        UILabel *label = [UILabel new];
-        label.text = [NSString stringWithFormat:@"%d:00",i];
-        label.font = [UIFont systemFontOfSize:8];
-        CGRect frame = CGRectMake(CGRectGetMinX(self.chartView.frame)+i*width, CGRectGetMaxY(self.chartView.frame)+8, width, 20);
-        label.frame = frame;
-        [self.view addSubview:label];
+        [xLabels addObject:[NSString stringWithFormat:@"%d",i]];
     }
+    
+    NSMutableArray *yLabels = [NSMutableArray new];
+    for (int i = 0; i<11; i++) {
+        [yLabels addObject:[NSString stringWithFormat:@"%d",i*20]];
+    }
+    
+    self.chartView.xLabels = xLabels;
+    self.chartView.yLabels = yLabels;
+    self.chartView.yMaxValue = 200;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -105,7 +102,10 @@ static NSDateFormatter *df;
         [amounts addObject:@(count)];
     }
     self.amounts = amounts;
-    [self.chartView reloadData];
+//    [self.chartView reloadData];
+    
+    self.chartView.yValues = self.amounts;
+    [self.chartView strokeChart];
     
 }
 
@@ -138,32 +138,6 @@ static NSDateFormatter *df;
         return [obj[@"date"] isEqualToDateIgnoringTime:self.currentDate];
     }];
     [self updateUI];
-}
-
-#pragma mark - JBBarChartViewDataSource
-
-- (NSUInteger)numberOfBarsInBarChartView:(JBBarChartView *)barChartView
-{
-    return 24; // number of bars in chart
-}
-
-- (UIColor *)barChartView:(JBBarChartView *)barChartView colorForBarViewAtIndex:(NSUInteger)index {
-    return (index % 2 == 0) ? kJBColorBarChartBarBlue : kJBColorBarChartBarGreen;
-}
-
-- (CGFloat)barChartView:(JBBarChartView *)barChartView heightForBarViewAtIndex:(NSUInteger)index
-{
-    CGFloat count = [self.amounts[index] floatValue];
-    if (!count) {
-        count = 1.00f;
-    }
-    return 20 * count; // height of bar at index
-}
-
-#pragma mark - JBBarChartViewDelegate
-
-- (CGFloat)barPaddingForBarChartView:(JBBarChartView *)barChartView {
-    return 5;
 }
 
 #pragma mark - helper

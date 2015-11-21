@@ -181,13 +181,15 @@
         _textLayer = [[CATextLayer alloc]init];
         [_textLayer setString:@"0"];
         [_textLayer setAlignmentMode:kCAAlignmentCenter];
-        [_textLayer setForegroundColor:[[UIColor colorWithRed:178/255.0 green:178/255. blue:178/255.0 alpha:1.0] CGColor]];
+        [_textLayer setForegroundColor:[[UIColor orangeColor] CGColor]];
        _textLayer.hidden = YES;
 
     }
 
     return _textLayer;
 }
+
+#define TEXT_FONT 10.0
 
 -(void)setGradeFrame:(CGFloat)grade startPosY:(CGFloat)startPosY
 {
@@ -197,12 +199,12 @@
     CGFloat textWidth = self.bounds.size.width;
   
     [_chartLine addSublayer:self.textLayer];
-    [self.textLayer setFontSize:18.0];
+    [self.textLayer setFontSize:TEXT_FONT];
   
     [self.textLayer setString:[[NSString alloc]initWithFormat:@"%0.f",grade*self.maxDivisor]];
   
     CGSize size = CGSizeMake(320,2000); //设置一个行高上限
-    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:18.0]};
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:TEXT_FONT]};
     size = [self.textLayer.string boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
     float verticalY ;
   
@@ -231,7 +233,7 @@
     [self.textLayer setString:[[NSString alloc]initWithFormat:@"- %1.f",_grade*self.maxDivisor]];
     
     CGSize size = CGSizeMake(320,2000); //设置一个行高上限
-    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:18.0]};
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:TEXT_FONT]};
     size = [self.textLayer.string boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size;
     CGRect frame = self.textLayer.frame;
     frame.origin.x = (self.bounds.size.width - size.width)/2.0;

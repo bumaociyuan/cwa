@@ -39,7 +39,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HKS-QH-Iaq" customClass="JBBarChartView">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HKS-QH-Iaq" customClass="PNBarChart">
                                 <rect key="frame" x="20" y="102" width="640" height="213"/>
                                 <animations/>
                             </view>
